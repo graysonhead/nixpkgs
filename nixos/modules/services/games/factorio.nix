@@ -283,6 +283,23 @@ in
           Autosaving on connected Windows clients will be disabled regardless of autosave_only_on_server option.
         '';
       };
+      rConPassword = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = ''
+          Sets the rcon server password.
+        '';
+      };
+      rConBind = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = ''
+          Bind address and port for rcon
+          '';
+        example = ''
+          127.0.0.1:25575
+        '';
+      };
     };
   };
 
@@ -327,6 +344,8 @@ in
           (playerListOption "server-adminlist" cfg.admins)
           (playerListOption "server-whitelist" cfg.allowedPlayers)
           (lib.optionalString (cfg.allowedPlayers != []) "--use-server-whitelist")
+          (lib.optionalString (cfg.rConPassword != null) "--rcon-password=${cfg.rConPassword}")
+          (lib.optionalString (cfg.rConBind != null) "--rcon-bind=${cfg.rConBind}")
         ];
 
         # Sandboxing
